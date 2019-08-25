@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<title>View Book - Favorite Books</title>
+	<style>
+		*{
+			/*outline: red dotted 1px;*/
+		}
+		.wrapper{
+			padding: 100px;
+		}
+		.content{
+			padding-top: 40px;
+		}
+		.uploader{
+			color: forestgreen;
+		}
+		.this_button{
+			margin :20px 15px 0px 0px; 
+		}
+		.gimme_some_space{
+			margin: 8px 5px;
+		}
+		.full_name{
+			color: forestgreen;	
+		}
+		.welcome{
+			border-bottom: darkgrey 3px solid;
+			padding-bottom:10px;
+		}
+		.center{
+			text-align: center;
+		}
+		.unlike{
+			margin-left: 50px;
+		}
+		.list_title{
+			margin-bottom: 30px;
+		}
+		.fav_book{
+			margin-top: 30px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid wrapper">
+		<h1 class="welcome">Welcome, <span class="full_name">{{full_name}}</span></h1>
+		<h1 class="center">{{book[0]['title']}}</h1>
+		<h4>by {{book[0]['author']}}</h4>
+		<h6>Uploaded by: {{ uploader_full_name }} </h6>
+		<div class="row container-fluid content">
+			<div class="col-md-5 form-group">
+				<form action="/edit_book/{{book[0]['id']}}" method="post">
+					{% if user_id != uploader_id %}
+						<h5>Description:</h5>
+						<p>{{book[0]['description']}}</p>
+					{% endif %}
+					{% if user_id == uploader_id %}
+						<h5>It's yo book, <span class="uploader">{{uploader_full_name}}</span>.  You may delete this book or edit its info.</h5>
+						<label class="gimme_some_space" for="title">Title</label>
+						<input type="text" name="title" class="form-control" placeholder="{{book[0]['title']}}">
+						<label class="gimme_some_space"for="author">Author</label>
+						<input type="text" name="author" class="form-control" placeholder="{{book[0]['author']}}">
+						<label class="gimme_some_space"for="description">Description</label>
+						<textarea name="description" class="form-control" rows="3" placeholder="{{book[0]['description']}}"></textarea>
+						<a class="btn btn-danger this_button" href="/delete_book/{{book[0]['id']}}" role="button">Delete book</a>
+						<button type="submit" class="btn btn-warning this_button">Edit book</button>
+						<a class="btn btn-secondary this_button" href="/main" role="button">Why do that</a>
+					{% endif %}
+				</form>
+				
+				
+			</div>
+			<div class="col-md-5">
+				<h3 class="list_title">Who likes this crap:</h3>
+				{% for favorite in data %}
+					<h5>
+						{% if favorite['user_id'] == user_id %}
+							<span class="uploader">
+						{% endif %}
+							{{ favorite['first_name'] }} {{ favorite['last_name'] }}
+						{% if favorite['user_id'] == user_id %}
+							</span><a class="btn btn-warning unlike" href="/unfavorite_book/{{favorite['favorites.id']}}/{{ book_id }}">
+								Un-favorite book
+							</a>
+						{% endif %}
+					</h5>
+				{% endfor %}
+				{% if user_likes == False %}
+					<a class="btn btn-warning fav_book" href="/favorite_book/{{ book_id }}/{{ user_id }}">Favorite this Book</a>
+				{% endif %}
+			</div>
+			<ul class="nav flex-column awesome">
+				<li class="nav-item">
+					<a class="nav-link" href="/main">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">I like turtles</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Witness protection</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link " href="/logout">Log out</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+
+
+
+
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
